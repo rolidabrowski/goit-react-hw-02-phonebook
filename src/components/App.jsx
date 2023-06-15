@@ -8,8 +8,6 @@ import { nanoid } from 'nanoid';
 const INITIAL_STATE = {
   contacts: [],
   filter: '',
-  name: '',
-  number: '',
 };
 
 export class App extends Component {
@@ -24,7 +22,7 @@ export class App extends Component {
     event.preventDefault();
     this.props.onSubmit({ ...this.state });
     this.saveContact();
-    this.reset();
+    this.setState({ ...INITIAL_STATE });
   };
 
   saveContact = () => {
@@ -42,35 +40,41 @@ export class App extends Component {
     this.state.contacts.push(contact);
   };
 
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
+  handleSearch = event => {
+    this.setState({ filter: event.currentTarget.value.toLowerCase() });
   };
 
-  handleSearch = event => {
-    event.preventDefault();
+  showContacts = () => {
     const { filter, contacts } = this.state;
     const normalizedFilter = filter.toLowerCase();
-    this.setState({ filter: event.target.value });
-    contacts.filter(contact =>
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
-    return contacts;
+  };
+
+  onRemove = contactId => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(
+          contact => contact.id !== contactId
+        ),
+      };
+    });
   };
 
   render() {
-    const { name, number, filter, contacts } = this.state;
+    const { filter } = this.state;
+    const visibleContacts = this.showContacts();
     return (
       <div>
         <h1 className={css.headTitle}>Phonebook</h1>
         <ContactForm
-          name={name}
-          number={number}
           onSubmit={this.handleSubmit}
           onChange={this.handleChange}
         />
         <h2 className={css.title}>Contacts</h2>
         <Filter value={filter} onChange={this.handleSearch} />
-        <ContactList contacts={contacts} />
+        <ContactList contacts={visibleContacts} onRemove={this.onRemove} />
       </div>
     );
   }
