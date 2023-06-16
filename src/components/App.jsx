@@ -25,10 +25,14 @@ export class App extends Component {
     event.preventDefault();
     const form = event.currentTarget;
     const { contacts } = this.state;
-    this.props.onSubmit({ ...this.state });
+    this.props.onSubmit({ ...contacts });
     this.setState({ ...contacts });
     this.saveContact();
     form.reset();
+  };
+
+  handleSearch = event => {
+    this.setState({ filter: event.currentTarget.value.toLowerCase() });
   };
 
   saveContact = () => {
@@ -44,10 +48,6 @@ export class App extends Component {
       return;
     }
     contacts.push(contact);
-  };
-
-  handleSearch = event => {
-    this.setState({ filter: event.currentTarget.value.toLowerCase() });
   };
 
   showContacts = () => {
@@ -73,7 +73,7 @@ export class App extends Component {
     const visibleContacts = this.showContacts();
     return (
       <div>
-        <h1 className={css.headTitle}>Phonebook</h1>
+        <h1 className={css.title}>Phonebook</h1>
         <ContactForm
           onSubmit={this.handleSubmit}
           onChange={this.handleChange}

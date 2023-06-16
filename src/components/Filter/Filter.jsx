@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 export const Filter = ({ value, onChange }) => {
   return (
     <section className={css.filter}>
-      <label>
-        Find contacts by name
+      <label className={css.label}>
+        <p>Find contacts by name</p>
         <input
           type="text"
           name="filter"

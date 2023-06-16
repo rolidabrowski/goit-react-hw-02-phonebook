@@ -6,10 +6,14 @@ export const ContactList = ({ contacts, onRemove }) => {
     <section className={css.list}>
       <ul>
         {contacts.map(contact => (
-          <li key={contact.id}>
-            <span>{contact.name}</span>
-            <span>{contact.number}</span>
-            <button type="button" onClick={() => onRemove(contact.id)}>
+          <li className={css.item} key={contact.id}>
+            <span className={css.text}>{contact.name}</span>
+            <span className={css.text}>{contact.number}</span>
+            <button
+              type="button"
+              className={css.button}
+              onClick={() => onRemove(contact.id)}
+            >
               Delete
             </button>
           </li>
