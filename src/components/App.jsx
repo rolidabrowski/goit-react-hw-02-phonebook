@@ -5,39 +5,45 @@ import { ContactList } from './ContactList';
 import { Filter } from './Filter';
 import { nanoid } from 'nanoid';
 
-const INITIAL_STATE = {
-  contacts: [],
-  filter: '',
-};
-
 export class App extends Component {
-  state = { ...INITIAL_STATE };
+  state = {
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
+  };
 
   handleChange = event => {
-    const { name, value } = event.target;
+    const { name, value } = event.currentTarget;
     this.setState({ [name]: value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const { contacts } = this.state;
     this.props.onSubmit({ ...this.state });
+    this.setState({ ...contacts });
     this.saveContact();
-    this.setState({ ...INITIAL_STATE });
+    form.reset();
   };
 
   saveContact = () => {
+    const { contacts } = this.state;
     const contact = {
       id: nanoid(),
       name: this.state.name,
       number: this.state.number,
     };
 
-    if (this.state.contacts.find(item => item.name === contact.name)) {
+    if (contacts.find(item => item.name === contact.name)) {
       alert(`${contact.name} is already in contacts`);
       return;
     }
-
-    this.state.contacts.push(contact);
+    contacts.push(contact);
   };
 
   handleSearch = event => {
